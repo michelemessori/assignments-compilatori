@@ -54,10 +54,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = "/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignment1/src"
+CMAKE_SOURCE_DIR = "/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignments/Assignment_1/AlgebraicIdentity/src"
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = "/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignment1/build"
+CMAKE_BINARY_DIR = "/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignments/Assignment_1/AlgebraicIdentity/build"
 
 #=============================================================================
 # Directory level rules for the build root directory
@@ -91,14 +91,14 @@ clean: CMakeFiles/AlgebraicIdentity.dir/clean
 CMakeFiles/intrinsics_gen.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/intrinsics_gen.dir/build.make CMakeFiles/intrinsics_gen.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/intrinsics_gen.dir/build.make CMakeFiles/intrinsics_gen.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir="/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignment1/build/CMakeFiles" --progress-num= "Built target intrinsics_gen"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir="/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignments/Assignment_1/AlgebraicIdentity/build/CMakeFiles" --progress-num= "Built target intrinsics_gen"
 .PHONY : CMakeFiles/intrinsics_gen.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/intrinsics_gen.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start "/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignment1/build/CMakeFiles" 0
+	$(CMAKE_COMMAND) -E cmake_progress_start "/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignments/Assignment_1/AlgebraicIdentity/build/CMakeFiles" 0
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/intrinsics_gen.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start "/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignment1/build/CMakeFiles" 0
+	$(CMAKE_COMMAND) -E cmake_progress_start "/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignments/Assignment_1/AlgebraicIdentity/build/CMakeFiles" 0
 .PHONY : CMakeFiles/intrinsics_gen.dir/rule
 
 # Convenience name for target.
@@ -108,7 +108,7 @@ intrinsics_gen: CMakeFiles/intrinsics_gen.dir/rule
 # codegen rule for target.
 CMakeFiles/intrinsics_gen.dir/codegen:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/intrinsics_gen.dir/build.make CMakeFiles/intrinsics_gen.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir="/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignment1/build/CMakeFiles" --progress-num= "Finished codegen for target intrinsics_gen"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir="/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignments/Assignment_1/AlgebraicIdentity/build/CMakeFiles" --progress-num= "Finished codegen for target intrinsics_gen"
 .PHONY : CMakeFiles/intrinsics_gen.dir/codegen
 
 # clean rule for target.
@@ -123,14 +123,14 @@ CMakeFiles/intrinsics_gen.dir/clean:
 CMakeFiles/omp_gen.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/omp_gen.dir/build.make CMakeFiles/omp_gen.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/omp_gen.dir/build.make CMakeFiles/omp_gen.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir="/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignment1/build/CMakeFiles" --progress-num= "Built target omp_gen"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir="/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignments/Assignment_1/AlgebraicIdentity/build/CMakeFiles" --progress-num= "Built target omp_gen"
 .PHONY : CMakeFiles/omp_gen.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/omp_gen.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start "/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignment1/build/CMakeFiles" 0
+	$(CMAKE_COMMAND) -E cmake_progress_start "/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignments/Assignment_1/AlgebraicIdentity/build/CMakeFiles" 0
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/omp_gen.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start "/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignment1/build/CMakeFiles" 0
+	$(CMAKE_COMMAND) -E cmake_progress_start "/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignments/Assignment_1/AlgebraicIdentity/build/CMakeFiles" 0
 .PHONY : CMakeFiles/omp_gen.dir/rule
 
 # Convenience name for target.
@@ -140,7 +140,7 @@ omp_gen: CMakeFiles/omp_gen.dir/rule
 # codegen rule for target.
 CMakeFiles/omp_gen.dir/codegen:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/omp_gen.dir/build.make CMakeFiles/omp_gen.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir="/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignment1/build/CMakeFiles" --progress-num= "Finished codegen for target omp_gen"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir="/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignments/Assignment_1/AlgebraicIdentity/build/CMakeFiles" --progress-num= "Finished codegen for target omp_gen"
 .PHONY : CMakeFiles/omp_gen.dir/codegen
 
 # clean rule for target.
@@ -155,14 +155,14 @@ CMakeFiles/omp_gen.dir/clean:
 CMakeFiles/acc_gen.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/acc_gen.dir/build.make CMakeFiles/acc_gen.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/acc_gen.dir/build.make CMakeFiles/acc_gen.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir="/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignment1/build/CMakeFiles" --progress-num= "Built target acc_gen"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir="/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignments/Assignment_1/AlgebraicIdentity/build/CMakeFiles" --progress-num= "Built target acc_gen"
 .PHONY : CMakeFiles/acc_gen.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/acc_gen.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start "/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignment1/build/CMakeFiles" 0
+	$(CMAKE_COMMAND) -E cmake_progress_start "/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignments/Assignment_1/AlgebraicIdentity/build/CMakeFiles" 0
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/acc_gen.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start "/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignment1/build/CMakeFiles" 0
+	$(CMAKE_COMMAND) -E cmake_progress_start "/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignments/Assignment_1/AlgebraicIdentity/build/CMakeFiles" 0
 .PHONY : CMakeFiles/acc_gen.dir/rule
 
 # Convenience name for target.
@@ -172,7 +172,7 @@ acc_gen: CMakeFiles/acc_gen.dir/rule
 # codegen rule for target.
 CMakeFiles/acc_gen.dir/codegen:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/acc_gen.dir/build.make CMakeFiles/acc_gen.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir="/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignment1/build/CMakeFiles" --progress-num= "Finished codegen for target acc_gen"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir="/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignments/Assignment_1/AlgebraicIdentity/build/CMakeFiles" --progress-num= "Finished codegen for target acc_gen"
 .PHONY : CMakeFiles/acc_gen.dir/codegen
 
 # clean rule for target.
@@ -187,14 +187,14 @@ CMakeFiles/acc_gen.dir/clean:
 CMakeFiles/ARMTargetParserTableGen.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/ARMTargetParserTableGen.dir/build.make CMakeFiles/ARMTargetParserTableGen.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/ARMTargetParserTableGen.dir/build.make CMakeFiles/ARMTargetParserTableGen.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir="/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignment1/build/CMakeFiles" --progress-num= "Built target ARMTargetParserTableGen"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir="/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignments/Assignment_1/AlgebraicIdentity/build/CMakeFiles" --progress-num= "Built target ARMTargetParserTableGen"
 .PHONY : CMakeFiles/ARMTargetParserTableGen.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/ARMTargetParserTableGen.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start "/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignment1/build/CMakeFiles" 0
+	$(CMAKE_COMMAND) -E cmake_progress_start "/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignments/Assignment_1/AlgebraicIdentity/build/CMakeFiles" 0
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/ARMTargetParserTableGen.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start "/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignment1/build/CMakeFiles" 0
+	$(CMAKE_COMMAND) -E cmake_progress_start "/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignments/Assignment_1/AlgebraicIdentity/build/CMakeFiles" 0
 .PHONY : CMakeFiles/ARMTargetParserTableGen.dir/rule
 
 # Convenience name for target.
@@ -204,7 +204,7 @@ ARMTargetParserTableGen: CMakeFiles/ARMTargetParserTableGen.dir/rule
 # codegen rule for target.
 CMakeFiles/ARMTargetParserTableGen.dir/codegen:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/ARMTargetParserTableGen.dir/build.make CMakeFiles/ARMTargetParserTableGen.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir="/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignment1/build/CMakeFiles" --progress-num= "Finished codegen for target ARMTargetParserTableGen"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir="/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignments/Assignment_1/AlgebraicIdentity/build/CMakeFiles" --progress-num= "Finished codegen for target ARMTargetParserTableGen"
 .PHONY : CMakeFiles/ARMTargetParserTableGen.dir/codegen
 
 # clean rule for target.
@@ -219,14 +219,14 @@ CMakeFiles/ARMTargetParserTableGen.dir/clean:
 CMakeFiles/AArch64TargetParserTableGen.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/AArch64TargetParserTableGen.dir/build.make CMakeFiles/AArch64TargetParserTableGen.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/AArch64TargetParserTableGen.dir/build.make CMakeFiles/AArch64TargetParserTableGen.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir="/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignment1/build/CMakeFiles" --progress-num= "Built target AArch64TargetParserTableGen"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir="/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignments/Assignment_1/AlgebraicIdentity/build/CMakeFiles" --progress-num= "Built target AArch64TargetParserTableGen"
 .PHONY : CMakeFiles/AArch64TargetParserTableGen.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/AArch64TargetParserTableGen.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start "/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignment1/build/CMakeFiles" 0
+	$(CMAKE_COMMAND) -E cmake_progress_start "/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignments/Assignment_1/AlgebraicIdentity/build/CMakeFiles" 0
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/AArch64TargetParserTableGen.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start "/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignment1/build/CMakeFiles" 0
+	$(CMAKE_COMMAND) -E cmake_progress_start "/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignments/Assignment_1/AlgebraicIdentity/build/CMakeFiles" 0
 .PHONY : CMakeFiles/AArch64TargetParserTableGen.dir/rule
 
 # Convenience name for target.
@@ -236,7 +236,7 @@ AArch64TargetParserTableGen: CMakeFiles/AArch64TargetParserTableGen.dir/rule
 # codegen rule for target.
 CMakeFiles/AArch64TargetParserTableGen.dir/codegen:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/AArch64TargetParserTableGen.dir/build.make CMakeFiles/AArch64TargetParserTableGen.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir="/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignment1/build/CMakeFiles" --progress-num= "Finished codegen for target AArch64TargetParserTableGen"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir="/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignments/Assignment_1/AlgebraicIdentity/build/CMakeFiles" --progress-num= "Finished codegen for target AArch64TargetParserTableGen"
 .PHONY : CMakeFiles/AArch64TargetParserTableGen.dir/codegen
 
 # clean rule for target.
@@ -251,14 +251,14 @@ CMakeFiles/AArch64TargetParserTableGen.dir/clean:
 CMakeFiles/RISCVTargetParserTableGen.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/RISCVTargetParserTableGen.dir/build.make CMakeFiles/RISCVTargetParserTableGen.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/RISCVTargetParserTableGen.dir/build.make CMakeFiles/RISCVTargetParserTableGen.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir="/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignment1/build/CMakeFiles" --progress-num= "Built target RISCVTargetParserTableGen"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir="/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignments/Assignment_1/AlgebraicIdentity/build/CMakeFiles" --progress-num= "Built target RISCVTargetParserTableGen"
 .PHONY : CMakeFiles/RISCVTargetParserTableGen.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/RISCVTargetParserTableGen.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start "/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignment1/build/CMakeFiles" 0
+	$(CMAKE_COMMAND) -E cmake_progress_start "/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignments/Assignment_1/AlgebraicIdentity/build/CMakeFiles" 0
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/RISCVTargetParserTableGen.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start "/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignment1/build/CMakeFiles" 0
+	$(CMAKE_COMMAND) -E cmake_progress_start "/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignments/Assignment_1/AlgebraicIdentity/build/CMakeFiles" 0
 .PHONY : CMakeFiles/RISCVTargetParserTableGen.dir/rule
 
 # Convenience name for target.
@@ -268,7 +268,7 @@ RISCVTargetParserTableGen: CMakeFiles/RISCVTargetParserTableGen.dir/rule
 # codegen rule for target.
 CMakeFiles/RISCVTargetParserTableGen.dir/codegen:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/RISCVTargetParserTableGen.dir/build.make CMakeFiles/RISCVTargetParserTableGen.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir="/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignment1/build/CMakeFiles" --progress-num= "Finished codegen for target RISCVTargetParserTableGen"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir="/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignments/Assignment_1/AlgebraicIdentity/build/CMakeFiles" --progress-num= "Finished codegen for target RISCVTargetParserTableGen"
 .PHONY : CMakeFiles/RISCVTargetParserTableGen.dir/codegen
 
 # clean rule for target.
@@ -283,14 +283,14 @@ CMakeFiles/RISCVTargetParserTableGen.dir/clean:
 CMakeFiles/AlgebraicIdentity.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/AlgebraicIdentity.dir/build.make CMakeFiles/AlgebraicIdentity.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/AlgebraicIdentity.dir/build.make CMakeFiles/AlgebraicIdentity.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir="/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignment1/build/CMakeFiles" --progress-num=1,2 "Built target AlgebraicIdentity"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir="/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignments/Assignment_1/AlgebraicIdentity/build/CMakeFiles" --progress-num=1,2 "Built target AlgebraicIdentity"
 .PHONY : CMakeFiles/AlgebraicIdentity.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/AlgebraicIdentity.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start "/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignment1/build/CMakeFiles" 2
+	$(CMAKE_COMMAND) -E cmake_progress_start "/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignments/Assignment_1/AlgebraicIdentity/build/CMakeFiles" 2
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/AlgebraicIdentity.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start "/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignment1/build/CMakeFiles" 0
+	$(CMAKE_COMMAND) -E cmake_progress_start "/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignments/Assignment_1/AlgebraicIdentity/build/CMakeFiles" 0
 .PHONY : CMakeFiles/AlgebraicIdentity.dir/rule
 
 # Convenience name for target.
@@ -300,7 +300,7 @@ AlgebraicIdentity: CMakeFiles/AlgebraicIdentity.dir/rule
 # codegen rule for target.
 CMakeFiles/AlgebraicIdentity.dir/codegen:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/AlgebraicIdentity.dir/build.make CMakeFiles/AlgebraicIdentity.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir="/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignment1/build/CMakeFiles" --progress-num=1,2 "Finished codegen for target AlgebraicIdentity"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir="/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignments/Assignment_1/AlgebraicIdentity/build/CMakeFiles" --progress-num=1,2 "Finished codegen for target AlgebraicIdentity"
 .PHONY : CMakeFiles/AlgebraicIdentity.dir/codegen
 
 # clean rule for target.

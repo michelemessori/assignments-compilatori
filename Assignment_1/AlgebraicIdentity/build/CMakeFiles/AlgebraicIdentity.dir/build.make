@@ -53,10 +53,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = "/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignment1/src"
+CMAKE_SOURCE_DIR = "/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignments/Assignment_1/AlgebraicIdentity/src"
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = "/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignment1/build"
+CMAKE_BINARY_DIR = "/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignments/Assignment_1/AlgebraicIdentity/build"
 
 # Include any dependencies generated for this target.
 include CMakeFiles/AlgebraicIdentity.dir/depend.make
@@ -73,18 +73,18 @@ CMakeFiles/AlgebraicIdentity.dir/codegen:
 .PHONY : CMakeFiles/AlgebraicIdentity.dir/codegen
 
 CMakeFiles/AlgebraicIdentity.dir/AlgebraicIdentity.cpp.o: CMakeFiles/AlgebraicIdentity.dir/flags.make
-CMakeFiles/AlgebraicIdentity.dir/AlgebraicIdentity.cpp.o: /home/michelemessori/Documenti/Università/Compilatori/Parte\ 2/Laboratori/Assignment1/src/AlgebraicIdentity.cpp
+CMakeFiles/AlgebraicIdentity.dir/AlgebraicIdentity.cpp.o: /home/michelemessori/Documenti/Università/Compilatori/Parte\ 2/Laboratori/Assignments/Assignment_1/AlgebraicIdentity/src/AlgebraicIdentity.cpp
 CMakeFiles/AlgebraicIdentity.dir/AlgebraicIdentity.cpp.o: CMakeFiles/AlgebraicIdentity.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir="/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignment1/build/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/AlgebraicIdentity.dir/AlgebraicIdentity.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/AlgebraicIdentity.dir/AlgebraicIdentity.cpp.o -MF CMakeFiles/AlgebraicIdentity.dir/AlgebraicIdentity.cpp.o.d -o CMakeFiles/AlgebraicIdentity.dir/AlgebraicIdentity.cpp.o -c "/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignment1/src/AlgebraicIdentity.cpp"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir="/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignments/Assignment_1/AlgebraicIdentity/build/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/AlgebraicIdentity.dir/AlgebraicIdentity.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/AlgebraicIdentity.dir/AlgebraicIdentity.cpp.o -MF CMakeFiles/AlgebraicIdentity.dir/AlgebraicIdentity.cpp.o.d -o CMakeFiles/AlgebraicIdentity.dir/AlgebraicIdentity.cpp.o -c "/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignments/Assignment_1/AlgebraicIdentity/src/AlgebraicIdentity.cpp"
 
 CMakeFiles/AlgebraicIdentity.dir/AlgebraicIdentity.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/AlgebraicIdentity.dir/AlgebraicIdentity.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignment1/src/AlgebraicIdentity.cpp" > CMakeFiles/AlgebraicIdentity.dir/AlgebraicIdentity.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignments/Assignment_1/AlgebraicIdentity/src/AlgebraicIdentity.cpp" > CMakeFiles/AlgebraicIdentity.dir/AlgebraicIdentity.cpp.i
 
 CMakeFiles/AlgebraicIdentity.dir/AlgebraicIdentity.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/AlgebraicIdentity.dir/AlgebraicIdentity.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignment1/src/AlgebraicIdentity.cpp" -o CMakeFiles/AlgebraicIdentity.dir/AlgebraicIdentity.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignments/Assignment_1/AlgebraicIdentity/src/AlgebraicIdentity.cpp" -o CMakeFiles/AlgebraicIdentity.dir/AlgebraicIdentity.cpp.s
 
 # Object files for target AlgebraicIdentity
 AlgebraicIdentity_OBJECTS = \
@@ -96,7 +96,7 @@ AlgebraicIdentity_EXTERNAL_OBJECTS =
 libAlgebraicIdentity.so: CMakeFiles/AlgebraicIdentity.dir/AlgebraicIdentity.cpp.o
 libAlgebraicIdentity.so: CMakeFiles/AlgebraicIdentity.dir/build.make
 libAlgebraicIdentity.so: CMakeFiles/AlgebraicIdentity.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir="/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignment1/build/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX shared library libAlgebraicIdentity.so"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir="/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignments/Assignment_1/AlgebraicIdentity/build/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX shared library libAlgebraicIdentity.so"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/AlgebraicIdentity.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -108,6 +108,6 @@ CMakeFiles/AlgebraicIdentity.dir/clean:
 .PHONY : CMakeFiles/AlgebraicIdentity.dir/clean
 
 CMakeFiles/AlgebraicIdentity.dir/depend:
-	cd "/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignment1/build" && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" "/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignment1/src" "/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignment1/src" "/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignment1/build" "/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignment1/build" "/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignment1/build/CMakeFiles/AlgebraicIdentity.dir/DependInfo.cmake" "--color=$(COLOR)" AlgebraicIdentity
+	cd "/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignments/Assignment_1/AlgebraicIdentity/build" && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" "/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignments/Assignment_1/AlgebraicIdentity/src" "/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignments/Assignment_1/AlgebraicIdentity/src" "/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignments/Assignment_1/AlgebraicIdentity/build" "/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignments/Assignment_1/AlgebraicIdentity/build" "/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignments/Assignment_1/AlgebraicIdentity/build/CMakeFiles/AlgebraicIdentity.dir/DependInfo.cmake" "--color=$(COLOR)" AlgebraicIdentity
 .PHONY : CMakeFiles/AlgebraicIdentity.dir/depend
 

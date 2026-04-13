@@ -1,5 +1,5 @@
 CMakeFiles/AlgebraicIdentity.dir/AlgebraicIdentity.cpp.o: \
- /home/michelemessori/Documenti/Università/Compilatori/Parte\ 2/Laboratori/Assignment1/src/AlgebraicIdentity.cpp \
+ /home/michelemessori/Documenti/Università/Compilatori/Parte\ 2/Laboratori/Assignments/Assignment_1/AlgebraicIdentity/src/AlgebraicIdentity.cpp \
  /usr/include/stdc-predef.h \
  /usr/lib/llvm19/include/llvm/IR/LegacyPassManager.h \
  /usr/lib/llvm19/include/llvm/Support/CBindingWrapping.h \

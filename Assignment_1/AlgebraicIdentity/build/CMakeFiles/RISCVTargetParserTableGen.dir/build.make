@@ -53,10 +53,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = "/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignment1/src"
+CMAKE_SOURCE_DIR = "/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignments/Assignment_1/AlgebraicIdentity/src"
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = "/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignment1/build"
+CMAKE_BINARY_DIR = "/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignments/Assignment_1/AlgebraicIdentity/build"
 
 # Utility rule file for RISCVTargetParserTableGen.
 
@@ -81,6 +81,6 @@ CMakeFiles/RISCVTargetParserTableGen.dir/clean:
 .PHONY : CMakeFiles/RISCVTargetParserTableGen.dir/clean
 
 CMakeFiles/RISCVTargetParserTableGen.dir/depend:
-	cd "/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignment1/build" && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" "/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignment1/src" "/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignment1/src" "/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignment1/build" "/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignment1/build" "/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignment1/build/CMakeFiles/RISCVTargetParserTableGen.dir/DependInfo.cmake" "--color=$(COLOR)" RISCVTargetParserTableGen
+	cd "/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignments/Assignment_1/AlgebraicIdentity/build" && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" "/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignments/Assignment_1/AlgebraicIdentity/src" "/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignments/Assignment_1/AlgebraicIdentity/src" "/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignments/Assignment_1/AlgebraicIdentity/build" "/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignments/Assignment_1/AlgebraicIdentity/build" "/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignments/Assignment_1/AlgebraicIdentity/build/CMakeFiles/RISCVTargetParserTableGen.dir/DependInfo.cmake" "--color=$(COLOR)" RISCVTargetParserTableGen
 .PHONY : CMakeFiles/RISCVTargetParserTableGen.dir/depend
 
