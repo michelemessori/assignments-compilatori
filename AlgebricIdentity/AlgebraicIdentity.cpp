@@ -12,87 +12,81 @@ namespace {
 struct AlgebraicIdentityPass : public PassInfoMixin<AlgebraicIdentityPass> {
     
     PreservedAnalyses run(Function &F, FunctionAnalysisManager &FAM) {
-        bool Changed = false;
         
-        // Raccogliamo le istruzioni in una lista separata per evitare 
-        // di modificare la BasicBlock mentre ci iteriamo sopra. grazie internet mi falliva il codice
-        std::vector<Instruction*> Worklist;
-        for (BasicBlock &BB : F) {
-            for (Instruction &I : BB) {
-                Worklist.push_back(&I);
-            }
-        }
+        for (auto Iter = F.begin(); Iter != F.end(); ++Iter) {
+            BasicBlock &BB = *Iter;
 
-        for (Instruction *I : Worklist) {
-
-            // ADDIZIONE
-            if (I->getOpcode() == Instruction::Add) {
-                Value *Op0 = I->getOperand(0);
-                Value *Op1 = I->getOperand(1);
+            for (auto InstIter = BB.begin(); InstIter != BB.end(); /* vuoto */ ) {
                 
-                ConstantInt *CI0 = dyn_cast<ConstantInt>(Op0);
-                ConstantInt *CI1 = dyn_cast<ConstantInt>(Op1);
+                Instruction &I_ref = *InstIter++;
+                Instruction *I = &I_ref;
 
-                //per mia fortuna esistono isZero() e isOne()
-                if ((CI0 && CI0->isZero()) || (CI1 && CI1->isZero())) {
+                // ADDIZIONE
+                if (I->getOpcode() == Instruction::Add) {
+                    Value *Op0 = I->getOperand(0);
+                    Value *Op1 = I->getOperand(1);
+                    
+                    ConstantInt *CI0 = dyn_cast<ConstantInt>(Op0);
+                    ConstantInt *CI1 = dyn_cast<ConstantInt>(Op1);
 
-                    Value *Replacement = (CI0 && CI0->isZero()) ? Op1 : Op0;
-                    I->replaceAllUsesWith(Replacement);
-                    I->eraseFromParent();
-                    Changed = true;
+                    //per mia fortuna esistono isZero() e isOne()
+                    if ((CI0 && CI0->isZero()) || (CI1 && CI1->isZero())) {
+                        Value *Replacement = (CI0 && CI0->isZero()) ? Op1 : Op0;
+                        I->replaceAllUsesWith(Replacement);
+                        I->eraseFromParent();
+                        Changed = true;
+                    }
+                } 
+                //MOLTIPLICAZIONE
+                else if (I->getOpcode() == Instruction::Mul) {
+                    Value *Op0 = I->getOperand(0);
+                    Value *Op1 = I->getOperand(1);
+                    
+                    ConstantInt *CI0 = dyn_cast<ConstantInt>(Op0);
+                    ConstantInt *CI1 = dyn_cast<ConstantInt>(Op1);
+
+                    if ((CI0 && CI0->isOne()) || (CI1 && CI1->isOne())) {
+                        Value *Replacement = (CI0 && CI0->isOne()) ? Op1 : Op0;
+                        I->replaceAllUsesWith(Replacement);
+                        I->eraseFromParent();
+                        Changed = true;
+                    }
                 }
-            } 
-            //MOLTIPLICAZIONE
-            else if (I->getOpcode() == Instruction::Mul) {
-                Value *Op0 = I->getOperand(0);
-                Value *Op1 = I->getOperand(1);
-                
-                ConstantInt *CI0 = dyn_cast<ConstantInt>(Op0);
-                ConstantInt *CI1 = dyn_cast<ConstantInt>(Op1);
+                //SOTTRAZIONE (SOLO x - 0 = x)
+                else if (I->getOpcode() == Instruction::Sub) {
+                    Value *Op0 = I->getOperand(0);
+                    Value *Op1 = I->getOperand(1);
+                    
+                    ConstantInt *CI1 = dyn_cast<ConstantInt>(Op1);
 
-                if ((CI0 && CI0->isOne()) || (CI1 && CI1->isOne())) {
-
-                    Value *Replacement = (CI0 && CI0->isOne()) ? Op1 : Op0;
-                    I->replaceAllUsesWith(Replacement);
-                    I->eraseFromParent();
-                    Changed = true;
+                    // Controlliamo SOLO l'operando di destra (Op1)
+                    if (CI1 && CI1->isZero()) {
+                        I->replaceAllUsesWith(Op0);
+                        I->eraseFromParent();
+                        Changed = true;
+                    }
                 }
-            }
-            //SOTTRAZIONE (SOLO x - 0 = x)
-            else if (I->getOpcode() == Instruction::Sub) {
-                Value *Op0 = I->getOperand(0);
-                Value *Op1 = I->getOperand(1);
-                
-                ConstantInt *CI1 = dyn_cast<ConstantInt>(Op1);
+                //DIVISIONE (SOLO x / 1 = x)
+                else if (I->getOpcode() == Instruction::SDiv || I->getOpcode() == Instruction::UDiv) {
+                    Value *Op0 = I->getOperand(0);
+                    Value *Op1 = I->getOperand(1);
+                    
+                    ConstantInt *CI1 = dyn_cast<ConstantInt>(Op1);
 
-                // Controlliamo SOLO l'operando di destra (Op1)
-                if (CI1 && CI1->isZero()) {
-                    I->replaceAllUsesWith(Op0);
-                    I->eraseFromParent();
-                    Changed = true;
-                }
-            }
-
-            //DIVISIONE (SOLO x / 1 = x)
-            else if (I->getOpcode() == Instruction::SDiv || I->getOpcode() == Instruction::UDiv) {
-                Value *Op0 = I->getOperand(0);
-                Value *Op1 = I->getOperand(1);
-                
-                ConstantInt *CI1 = dyn_cast<ConstantInt>(Op1);
-
-                // Controlliamo SOLO l'operando di destra (Op1)
-                if (CI1 && CI1->isOne()) {
-                    I->replaceAllUsesWith(Op0);
-                    I->eraseFromParent();
-                    Changed = true;
+                    // Controlliamo SOLO l'operando di destra (Op1)
+                    if (CI1 && CI1->isOne()) {
+                        I->replaceAllUsesWith(Op0);
+                        I->eraseFromParent();
+                        Changed = true;
+                    }
                 }
             }
         }
 
-        return Changed ? PreservedAnalyses::none() : PreservedAnalyses::all();
+        return PreservedAnalyses::all();
     }
 };
-} 
+}
 
 llvm::PassPluginLibraryInfo getAlgebraicIdentityPluginInfo() {
     return {LLVM_PLUGIN_API_VERSION, "AlgebraicIdentity", LLVM_VERSION_STRING,
