@@ -1,64 +1,98 @@
-#include "llvm/IR/LegacyPassManager.h"
+#include "llvm/IR/PassManager.h"
 #include "llvm/Passes/PassBuilder.h"
 #include "llvm/Passes/PassPlugin.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm/IR/Function.h"
+#include "llvm/IR/Instructions.h"
+#include "llvm/IR/Constants.h"
 
 using namespace llvm;
 
-namespace{
+namespace {
 
-struct AlgebraicIdentity: PassInfoMixin<AlgebraicIdentity> {
-  PreservedAnalyses run(Function &F, FunctionAnalysisManager &) {
-    for (auto Iter = F.begin(); Iter != F.end(); ++Iter) {
-      BasicBlock &B = *Iter;
+struct AlgebraicIdentityPass : public PassInfoMixin<AlgebraicIdentityPass> {
+    
+    PreservedAnalyses run(Function &F, FunctionAnalysisManager &FAM) {
+        
+        for (auto Iter = F.begin(); Iter != F.end(); ++Iter) {
+            BasicBlock &BB = *Iter;
 
-      for (auto InstIter = B.begin(); InstIter != B.end(); ++InstIter) {
-        Instruction &Inst = *InstIter;
+            for (auto InstIter = BB.begin(); InstIter != BB.end(); /* vuoto */ ) {
+                
+                Instruction &I_ref = *InstIter++;
+                Instruction *I = &I_ref;
 
-        if(auto *BinOp = dyn_cast<BinaryOperator>(&Inst)) {
+                // ADDIZIONE
+                if (I->getOpcode() == Instruction::Add) {
+                    Value *Op0 = I->getOperand(0);
+                    Value *Op1 = I->getOperand(1);
+                    
+                    ConstantInt *CI0 = dyn_cast<ConstantInt>(Op0);
+                    ConstantInt *CI1 = dyn_cast<ConstantInt>(Op1);
 
-          if(BinOp->getOpcode() == Instruction::Add) {
-            // è una add: controllo se uno dei due operandi è 0
-            auto *ConstOp0 = dyn_cast<ConstantInt>(BinOp->getOperand(0));
-            auto *ConstOp1 = dyn_cast<ConstantInt>(BinOp->getOperand(1));
+                    //per mia fortuna esistono isZero() e isOne()
+                    if ((CI0 && CI0->isZero()) || (CI1 && CI1->isZero())) {
+                        Value *Replacement = (CI0 && CI0->isZero()) ? Op1 : Op0;
+                        I->replaceAllUsesWith(Replacement);
+                        I->eraseFromParent();
+                    }
+                } 
+                //MOLTIPLICAZIONE
+                else if (I->getOpcode() == Instruction::Mul) {
+                    Value *Op0 = I->getOperand(0);
+                    Value *Op1 = I->getOperand(1);
+                    
+                    ConstantInt *CI0 = dyn_cast<ConstantInt>(Op0);
+                    ConstantInt *CI1 = dyn_cast<ConstantInt>(Op1);
 
-            if(ConstOp0 && ConstOp0->getValue() == 0) {
-              //trovato 0 + x
-              BinOp->replaceAllUsesWith(BinOp->getOperand(1));
-            } else if(ConstOp1 && ConstOp1->getValue() == 0) {
-              //trovato x + 0
-              BinOp->replaceAllUsesWith(BinOp->getOperand(0));
+                    if ((CI0 && CI0->isOne()) || (CI1 && CI1->isOne())) {
+                        Value *Replacement = (CI0 && CI0->isOne()) ? Op1 : Op0;
+                        I->replaceAllUsesWith(Replacement);
+                        I->eraseFromParent();
+                    }
+                }
+                //SOTTRAZIONE (SOLO x - 0 = x)
+                else if (I->getOpcode() == Instruction::Sub) {
+                    Value *Op0 = I->getOperand(0);
+                    Value *Op1 = I->getOperand(1);
+                    
+                    ConstantInt *CI1 = dyn_cast<ConstantInt>(Op1);
+
+                    // Controlliamo SOLO l'operando di destra (Op1)
+                    if (CI1 && CI1->isZero()) {
+                        I->replaceAllUsesWith(Op0);
+                        I->eraseFromParent();
+                    }
+                }
+                //DIVISIONE (SOLO x / 1 = x)
+                else if (I->getOpcode() == Instruction::SDiv || I->getOpcode() == Instruction::UDiv) {
+                    Value *Op0 = I->getOperand(0);
+                    Value *Op1 = I->getOperand(1);
+                    
+                    ConstantInt *CI1 = dyn_cast<ConstantInt>(Op1);
+
+                    // Controlliamo SOLO l'operando di destra (Op1)
+                    if (CI1 && CI1->isOne()) {
+                        I->replaceAllUsesWith(Op0);
+                        I->eraseFromParent();
+                    }
+                }
             }
-          } else if(BinOp->getOpcode() == Instruction::Mul) {
-            //è una mul: controllo se uno dei due operandi è 1
-            auto *ConstOp0 = dyn_cast<ConstantInt>(BinOp->getOperand(0));
-            auto *ConstOp1 = dyn_cast<ConstantInt>(BinOp->getOperand(1));
-
-            if(ConstOp0 && ConstOp0->getValue() == 1) {
-                //trovato 1 * x
-                BinOp->replaceAllUsesWith(BinOp->getOperand(1));
-            } else if(ConstOp1 && ConstOp1->getValue() == 1) {
-                //trovato x * 1
-                BinOp->replaceAllUsesWith(BinOp->getOperand(0));
-            }
-          }
         }
-      }
+
+        return PreservedAnalyses::all();
     }
-    return PreservedAnalyses::all();
-  }
-  static bool isRequired() { return true; }
 };
-} //namespace
+}
 
 llvm::PassPluginLibraryInfo getAlgebraicIdentityPluginInfo() {
     return {LLVM_PLUGIN_API_VERSION, "AlgebraicIdentity", LLVM_VERSION_STRING,
             [](PassBuilder &PB) {
                 PB.registerPipelineParsingCallback(
                     [](StringRef Name, FunctionPassManager &FPM,
-                    ArrayRef<PassBuilder::PipelineElement>) {
+                       ArrayRef<PassBuilder::PipelineElement>) {
+                        // Il nome richiamabile da linea di comando è "algebraic-identity"
                         if (Name == "algebraic-identity") {
-                            FPM.addPass(AlgebraicIdentity());
+                            FPM.addPass(AlgebraicIdentityPass());
                             return true;
                         }
                         return false;

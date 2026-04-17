@@ -1,9 +1,0 @@
-/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignments/Assignment_1/AlgebraicIdentity/build/CMakeFiles/intrinsics_gen.dir
-/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignments/Assignment_1/AlgebraicIdentity/build/CMakeFiles/omp_gen.dir
-/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignments/Assignment_1/AlgebraicIdentity/build/CMakeFiles/acc_gen.dir
-/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignments/Assignment_1/AlgebraicIdentity/build/CMakeFiles/ARMTargetParserTableGen.dir
-/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignments/Assignment_1/AlgebraicIdentity/build/CMakeFiles/AArch64TargetParserTableGen.dir
-/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignments/Assignment_1/AlgebraicIdentity/build/CMakeFiles/RISCVTargetParserTableGen.dir
-/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignments/Assignment_1/AlgebraicIdentity/build/CMakeFiles/AlgebraicIdentity.dir
-/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignments/Assignment_1/AlgebraicIdentity/build/CMakeFiles/edit_cache.dir
-/home/michelemessori/Documenti/Università/Compilatori/Parte 2/Laboratori/Assignments/Assignment_1/AlgebraicIdentity/build/CMakeFiles/rebuild_cache.dir
