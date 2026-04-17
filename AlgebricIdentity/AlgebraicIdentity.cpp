@@ -34,7 +34,6 @@ struct AlgebraicIdentityPass : public PassInfoMixin<AlgebraicIdentityPass> {
                         Value *Replacement = (CI0 && CI0->isZero()) ? Op1 : Op0;
                         I->replaceAllUsesWith(Replacement);
                         I->eraseFromParent();
-                        Changed = true;
                     }
                 } 
                 //MOLTIPLICAZIONE
@@ -49,7 +48,6 @@ struct AlgebraicIdentityPass : public PassInfoMixin<AlgebraicIdentityPass> {
                         Value *Replacement = (CI0 && CI0->isOne()) ? Op1 : Op0;
                         I->replaceAllUsesWith(Replacement);
                         I->eraseFromParent();
-                        Changed = true;
                     }
                 }
                 //SOTTRAZIONE (SOLO x - 0 = x)
@@ -63,7 +61,6 @@ struct AlgebraicIdentityPass : public PassInfoMixin<AlgebraicIdentityPass> {
                     if (CI1 && CI1->isZero()) {
                         I->replaceAllUsesWith(Op0);
                         I->eraseFromParent();
-                        Changed = true;
                     }
                 }
                 //DIVISIONE (SOLO x / 1 = x)
@@ -77,7 +74,6 @@ struct AlgebraicIdentityPass : public PassInfoMixin<AlgebraicIdentityPass> {
                     if (CI1 && CI1->isOne()) {
                         I->replaceAllUsesWith(Op0);
                         I->eraseFromParent();
-                        Changed = true;
                     }
                 }
             }
