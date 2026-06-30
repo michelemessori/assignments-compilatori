@@ -2,32 +2,23 @@
 #include "llvm/Passes/PassBuilder.h"
 #include "llvm/Passes/PassPlugin.h"
 #include "llvm/Support/raw_ostream.h"
+#include <llvm/IR/Analysis.h>
 
 using namespace llvm;
 
 namespace{
 struct StrengthReduction: PassInfoMixin<StrengthReduction> {
 
-  void sdivOptimization(Instruction &Inst){
-    // guardo se uno dei due operandi è costante
-    Value *VarOp = nullptr;
-    ConstantInt *ConstOp = nullptr;
-
-    Instruction *NewInst = nullptr;
-    if (auto *C = dyn_cast<ConstantInt>(Inst.getOperand(0))) {
-      ConstOp = C;
-      VarOp = Inst.getOperand(1);
-    } else if (auto *C = dyn_cast<ConstantInt>(Inst.getOperand(1))) {
-      ConstOp = C;
-      VarOp = Inst.getOperand(0);
-    }
+  bool udivOptimization(Instruction &Inst){
+    // guardo se l'operando destro è costante
+    ConstantInt *ConstOp = dyn_cast<ConstantInt>(Inst.getOperand(1));
 
     // guardo se l'operando è una potenza di 2, nel caso shift
     if(ConstOp && ConstOp->getValue().isPowerOf2()) {
-      outs() << "TROVATA SDIV CON OPERANDO POTENZA DI 2:\n\t " << Inst << "\n";
-      NewInst = BinaryOperator::Create(
+      outs() << "TROVATA UDIV CON OPERANDO POTENZA DI 2:\n\t " << Inst << "\n";
+      Instruction* NewInst = BinaryOperator::Create(
         Instruction::LShr, 
-        VarOp,
+        Inst.getOperand(0),
         ConstantInt::get(ConstOp->getType(), ConstOp->getValue().exactLogBase2())
       );
       
@@ -36,21 +27,22 @@ struct StrengthReduction: PassInfoMixin<StrengthReduction> {
 
       //aggiorno gli usi
       Inst.replaceAllUsesWith(NewInst);
-
       outs() << "SOSTITUITA CON:\n\t " << *NewInst << "\n";
+      return true;
     }
+    return false;
   }
   
-  void mulOptimization(Instruction &Inst) {
+  bool mulOptimization(Instruction &Inst) {
     // guardo quale dei due operandi è costante
     Value *VarOp = nullptr;
     ConstantInt *ConstOp = nullptr;
 
     Instruction *NewInst = nullptr;
-    if (auto *C = dyn_cast<ConstantInt>(Inst.getOperand(0))) {
+    if (ConstantInt *C = dyn_cast<ConstantInt>(Inst.getOperand(0))) {
       ConstOp = C;
       VarOp = Inst.getOperand(1);
-    } else if (auto *C = dyn_cast<ConstantInt>(Inst.getOperand(1))) {
+    } else if (ConstantInt *C = dyn_cast<ConstantInt>(Inst.getOperand(1))) {
       ConstOp = C;
       VarOp = Inst.getOperand(0);
     }
@@ -64,6 +56,9 @@ struct StrengthReduction: PassInfoMixin<StrengthReduction> {
           VarOp,
           ConstantInt::get(ConstOp->getType(), ConstOp->getValue().exactLogBase2())
         );
+        NewInst->insertAfter(&Inst);
+        Inst.replaceAllUsesWith(NewInst);
+        return true;
       } else if((ConstOp->getValue()+1).isPowerOf2()) {
         outs() << "TROVATA MUL CON OPERANDO DI FORMA 2^n-1:\n\t " << Inst << "\n";
         Instruction *Shift = BinaryOperator::Create(
@@ -78,7 +73,9 @@ struct StrengthReduction: PassInfoMixin<StrengthReduction> {
           VarOp
         );
         NewInst->insertAfter(Shift);
+        Inst.replaceAllUsesWith(NewInst);
         outs() << "SOSTITUITA CON:\n\t " << *Shift << "\n\t" << *NewInst << "\n";
+        return true;
       } else if ((ConstOp->getValue()-1).isPowerOf2()) {
         outs() << "TROVATA MUL CON OPERANDO DI FORMA 2^n+1:\n\t " << Inst << "\n";
         Instruction *Shift = BinaryOperator::Create(
@@ -93,31 +90,35 @@ struct StrengthReduction: PassInfoMixin<StrengthReduction> {
           VarOp
         );
         NewInst->insertAfter(Shift);
+        Inst.replaceAllUsesWith(NewInst);
         outs() << "SOSTITUITA CON:\n\t " << *Shift << "\n\t" << *NewInst << "\n";
 
+        return true;
       }
-
     }
+    return false;
   }
 
   PreservedAnalyses run(Function &F, FunctionAnalysisManager &) { 
+    bool Changed = false;
     for (auto Iter = F.begin(); Iter != F.end(); ++Iter) {
       BasicBlock &B = *Iter;
 
       for (auto InstIter = B.begin(); InstIter != B.end(); ++InstIter) {
         Instruction &Inst = *InstIter;
 
-        if(auto *BinOp = dyn_cast<BinaryOperator>(&Inst)) {
-          if(BinOp->getOpcode() == Instruction::SDiv) {
-            sdivOptimization(Inst);
+        if(BinaryOperator *BinOp = dyn_cast<BinaryOperator>(&Inst)) {
+          if(BinOp->getOpcode() == Instruction::UDiv) {
+            Changed = udivOptimization(Inst) || Changed;
           } else if(BinOp->getOpcode() == Instruction::Mul) {
-            mulOptimization(Inst);
+            Changed = mulOptimization(Inst) || Changed;
           }
         }
       }
     }
 
-    return PreservedAnalyses::all();
+    return Changed ? PreservedAnalyses::none()
+                   : PreservedAnalyses::all();
   }
   static bool isRequired() { return true; }
 };

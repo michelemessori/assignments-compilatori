@@ -1,53 +1,72 @@
-#include "llvm/IR/LegacyPassManager.h"
+#include "llvm/IR/PassManager.h"
 #include "llvm/Passes/PassBuilder.h"
 #include "llvm/Passes/PassPlugin.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm/IR/Function.h"
+#include "llvm/IR/Instructions.h"
+#include "llvm/IR/Constants.h"
 
 using namespace llvm;
-namespace{
-struct MultiInstructionOpt: PassInfoMixin<MultiInstructionOpt> {
-  PreservedAnalyses run(Function &F, FunctionAnalysisManager &) { 
-    for (auto Iter = F.begin(); Iter != F.end(); ++Iter) {
-      BasicBlock &B = *Iter;
-      for (auto InstIter = B.begin(); InstIter != B.end(); ++InstIter) {
-        Instruction &Inst = *InstIter;
-        if(auto *BinOp = dyn_cast<BinaryOperator>(&*InstIter)) {
-          // guardo quale dei due operandi è costante
-          Value *VarOp = nullptr;
-          ConstantInt *ConstOp = nullptr;
 
-          if (auto *C = dyn_cast<ConstantInt>(BinOp->getOperand(0))) {
-            ConstOp = C;
-            VarOp = BinOp->getOperand(1);
-          } else if (auto *C = dyn_cast<ConstantInt>(BinOp->getOperand(1))) {
-            ConstOp = C;
-            VarOp = BinOp->getOperand(0);
+namespace {
+
+struct MultiInstructionOpt : public PassInfoMixin<MultiInstructionOpt> {
+  
+  PreservedAnalyses run(Function &F, FunctionAnalysisManager &FAM) {
+    bool Changed = false;
+    
+    for (auto Iter = F.begin(); Iter != F.end(); ++Iter) {
+      BasicBlock &BB = *Iter;
+
+      for (auto InstIter = BB.begin(); InstIter != BB.end(); ) {
+        Instruction &Inst2 = *InstIter++; // c = a - 1
+
+        // Cerchiamo un'addizione o sottrazione
+        if (Inst2.getOpcode() == Instruction::Add || Inst2.getOpcode() == Instruction::Sub) {
+          
+          Value *Op2_Left = Inst2.getOperand(0);
+          Value *Op2_Right = Inst2.getOperand(1);
+          
+          // Nelle sottrazioni la costante DEVE essere a destra (es. a - 1)
+          ConstantInt *C2 = dyn_cast<ConstantInt>(Op2_Right);
+          Instruction *Inst1 = dyn_cast<Instruction>(Op2_Left);
+
+          if (Inst2.getOpcode() == Instruction::Add && !C2) {
+            C2 = dyn_cast<ConstantInt>(Op2_Left);
+            Inst1 = dyn_cast<Instruction>(Op2_Right);
           }
 
-          // se ha un operando costante, guardo gli users
-          if(ConstOp){
-            for (auto userIter = Inst.user_begin(); userIter != Inst.user_end(); ++userIter) {
-              User *U = *userIter;
-              // controllo che l'user sia un operatore binario
-              if (auto *UserBinOp = dyn_cast<BinaryOperator>(U)) {
-                // controllo che abbia lo stesso operando costante
-                if (UserBinOp->getOperand(0) == ConstOp || UserBinOp->getOperand(1) == ConstOp) {
-                  // guardo se ha operazione inversa rispetto a BinOp
-                  if ((BinOp->getOpcode() == Instruction::Mul && UserBinOp->getOpcode() == Instruction::SDiv) ||
-                      (BinOp->getOpcode() == Instruction::SDiv && UserBinOp->getOpcode() == Instruction::Mul) ||
-                      (BinOp->getOpcode() == Instruction::Add && UserBinOp->getOpcode() == Instruction::Sub) ||
-                      (BinOp->getOpcode() == Instruction::Sub && UserBinOp->getOpcode() == Instruction::Add)) {
-                    outs() << "TROVATA OPERAZIONE INVERSA CON STESSI OPERATORI:\n\t " << Inst << "\n\t " << *U << "\n";
-                    
-                    // in questo caso, posso sostituire la seconda operazione con un assegnamento
-                    Instruction *NewInst = BinaryOperator::Create(
-                      Instruction::Add, 
-                      VarOp,
-                      ConstantInt::get(ConstOp->getType(), 0)
-                    );
-                    NewInst->insertAfter(UserBinOp);
-                    UserBinOp->replaceAllUsesWith(NewInst);
-                    outs() << "SOSTITUITA CON:\n\t " << *NewInst << "\n";
+          // Se abbiamo trovato una costante (C2) e l'altro operando è un'istruzione (Inst1)
+          if (C2 && Inst1) {
+            
+            // Ora ispezioniamo Inst1 (a = b + 1)
+            if (Inst1->getOpcode() == Instruction::Add || Inst1->getOpcode() == Instruction::Sub) {
+              
+              Value *Op1_Left = Inst1->getOperand(0);
+              Value *Op1_Right = Inst1->getOperand(1);
+
+              ConstantInt *C1 = dyn_cast<ConstantInt>(Op1_Right);
+              Value *BaseVar = Op1_Left; // Questa è la nostra 'b'
+
+              if (Inst1->getOpcode() == Instruction::Add && !C1) {
+                C1 = dyn_cast<ConstantInt>(Op1_Left);
+                BaseVar = Op1_Right;
+              }
+
+              if (C1) {
+                // Abbiamo trovato: Inst2( Inst1(BaseVar, C1), C2 )
+                if (C1->getValue() == C2->getValue()) {
+                  
+                  // CASO 1: Addizione seguita da Sottrazione (b + C) - C
+                  if (Inst1->getOpcode() == Instruction::Add && Inst2.getOpcode() == Instruction::Sub) {
+                    Inst2.replaceAllUsesWith(BaseVar);
+                    Inst2.eraseFromParent();
+                    Changed = true;
+                  }
+                  // CASO 2: Sottrazione seguita da Addizione (b - C) + C
+                  else if (Inst1->getOpcode() == Instruction::Sub && Inst2.getOpcode() == Instruction::Add) {
+                    Inst2.replaceAllUsesWith(BaseVar);
+                    Inst2.eraseFromParent();
+                    Changed = true;
                   }
                 }
               }
@@ -57,27 +76,27 @@ struct MultiInstructionOpt: PassInfoMixin<MultiInstructionOpt> {
       }
     }
 
-    return PreservedAnalyses::all();
+    return Changed ? PreservedAnalyses::none() : PreservedAnalyses::all();
   }
-  static bool isRequired() { return true; }
 };
-} //namespace
+} // end anonymous namespace
 
 llvm::PassPluginLibraryInfo getMultiInstructionOptPluginInfo() {
   return {LLVM_PLUGIN_API_VERSION, "MultiInstructionOpt", LLVM_VERSION_STRING,
-          [](PassBuilder &PB) {
-            PB.registerPipelineParsingCallback(
-                [](StringRef Name, FunctionPassManager &FPM,
-                   ArrayRef<PassBuilder::PipelineElement>) {
-                  if (Name == "multi-instruction-opt") {
-                    FPM.addPass(MultiInstructionOpt());
-                    return true;
-                  }
-                  return false;
-                });
-          }};
+      [](PassBuilder &PB) {
+        PB.registerPipelineParsingCallback(
+          [](StringRef Name, FunctionPassManager &FPM,
+             ArrayRef<PassBuilder::PipelineElement>) {
+            if (Name == "multi-instruction-opt") {
+              FPM.addPass(MultiInstructionOpt());
+              return true;
+            }
+            return false;
+          });
+      }};
 }
 
-extern "C" LLVM_ATTRIBUTE_WEAK ::llvm::PassPluginLibraryInfo llvmGetPassPluginInfo() {
+extern "C" LLVM_ATTRIBUTE_WEAK ::llvm::PassPluginLibraryInfo
+llvmGetPassPluginInfo() {
   return getMultiInstructionOptPluginInfo();
 }
