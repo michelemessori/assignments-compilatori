@@ -135,47 +135,103 @@ struct LoopFusionPass: PassInfoMixin<LoopFusionPass>{
 
 
   // -- 4a condizione: nessuna dipendenza a distanza negativa tra L1 e L0 --
+  bool noNegativeDistanceDependencies(
+      Loop *L0,
+      Loop *L1,
+      ScalarEvolution &SE) {
 
-  bool noNegativeDistanceDependencies(Loop *L0, Loop *L1, ScalarEvolution &SE){
-    auto memInstructions = [](Loop *L){
-      SmallVector<Instruction *, 16> insts;
+    auto memInstructions = [](Loop *L) {
+      SmallVector<Instruction *, 16> Insts;
+
       for (BasicBlock *BB : L->blocks())
         for (Instruction &I : *BB)
-          if(isa<LoadInst>(I) || isa<StoreInst>(I))
-            insts.push_back(&I);
-      return insts;
+          if (isa<LoadInst>(I) || isa<StoreInst>(I))
+            Insts.push_back(&I);
+
+      return Insts;
     };
 
-    for(Instruction *I0 : memInstructions(L0)){
-      for(Instruction *I1 : memInstructions(L1)){
+    for (Instruction *I0 : memInstructions(L0)) {
+      for (Instruction *I1 : memInstructions(L1)) {
+
         // il caso in cui siano entrambe load non è problematico
-        if(isa<LoadInst>(I0) && isa<LoadInst>(I1))
+        if (isa<LoadInst>(I0) && isa<LoadInst>(I1))
           continue;
-    
+
         Value *Ptr0 = getLoadStorePointerOperand(I0);
         Value *Ptr1 = getLoadStorePointerOperand(I1);
-        if(!Ptr0 || !Ptr1) continue;
 
-        // se accedono a oggetti diversi, non c'è dipendenza da controllare
-        if(getUnderlyingObject(Ptr0) != getUnderlyingObject(Ptr1))
+        if (!Ptr0 || !Ptr1)
           continue;
 
-        const SCEV *Scev0 = SE.getSCEVAtScope(Ptr0, L0);
-        const SCEV *Scev1 = SE.getSCEVAtScope(Ptr1, L1);
+        // c'è dipendenza solo se accedono allo stesso array
+        if (getUnderlyingObject(Ptr0) != getUnderlyingObject(Ptr1))
+          continue;
 
-        if(isa<SCEVCouldNotCompute>(Scev0) || isa<SCEVCouldNotCompute>(Scev1))
+        const SCEV *Addr0 = SE.getSCEVAtScope(Ptr0, L0);
+        const SCEV *Addr1 = SE.getSCEVAtScope(Ptr1, L1);
+
+        if (isa<SCEVCouldNotCompute>(Addr0) ||
+            isa<SCEVCouldNotCompute>(Addr1))
           return false;
 
-        const SCEV *Scev1InL0 = rewriteSCEVInTermsOfLoop(Scev1, L1, L0, SE);
+        const SCEV *Addr1InL0 = rewriteSCEVInTermsOfLoop(Addr1, L1, L0, SE);
 
-        // controllo: l'indirizzo che usa I1 è sempre <= di quello che usa I0?
-        if(!SE.isKnownPredicate(CmpInst::ICMP_SLE, Scev1InL0, Scev0))
+        auto *AR0 = dyn_cast<SCEVAddRecExpr>(Addr0);
+        auto *AR1 = dyn_cast<SCEVAddRecExpr>(Addr1InL0);
+
+        if (!AR0 || !AR1)
           return false;
+
+        const SCEV *Step0 = AR0->getStepRecurrence(SE);
+        const SCEV *Step1 = AR1->getStepRecurrence(SE);
+
+        bool Step0Pos = SE.isKnownPredicate(CmpInst::ICMP_SGT,
+                                Step0,
+                                SE.getZero(Step0->getType()));
+
+        bool Step0Neg = SE.isKnownPredicate(CmpInst::ICMP_SLT,
+                                Step0,
+                                SE.getZero(Step0->getType()));
+
+        bool Step1Pos = SE.isKnownPredicate(CmpInst::ICMP_SGT,
+                                Step1,
+                                SE.getZero(Step1->getType()));
+
+        bool Step1Neg = SE.isKnownPredicate(CmpInst::ICMP_SLT,
+                                Step1,
+                                SE.getZero(Step1->getType()));
+
+        if ((!Step0Pos && !Step0Neg) || (!Step1Pos && !Step1Neg))
+          return false;
+
+        const SCEV *Dist = SE.getMinusSCEV(Addr1InL0, Addr0);
+
+        //se gli step sono positivi, la differenza dev'essere <= 0
+        // (indirizzo accesso da I1 <= indirizzo accesso da I0)
+        if (Step0Pos && Step1Pos) {
+          if (!SE.isKnownPredicate(
+                  CmpInst::ICMP_SGE,
+                  Dist,
+                  SE.getZero(Dist->getType())))
+            return false;
+        }
+        // se gli step sono negativi, la differenza dev'essere >= 0
+        else if (Step0Neg && Step1Neg) {
+          if (!SE.isKnownPredicate(
+                  CmpInst::ICMP_SLE,
+                  Dist,
+                  SE.getZero(Dist->getType())))
+            return false;
+        }
+        else {
+          return false;
+        }
       }
     }
+
     return true;
   }
-
   // funzione wrapper che raccoglie tutti i controlli necessari alla fusione
   bool canFuseLoops(Loop *L0, Loop *L1, DominatorTree &DT, PostDominatorTree &PDT, ScalarEvolution &SE){
     if(!eligibilityCheck(L0) || !eligibilityCheck(L1)){
@@ -224,8 +280,6 @@ struct LoopFusionPass: PassInfoMixin<LoopFusionPass>{
      1. La sostituzione degli usi della seconda induction variable con la prima
      2. L'agganciamento del body del secondo loop dopo il primo */
   bool fuseLoops(Loop *L0, Loop *L1, ScalarEvolution &SE, LoopInfo &LI){
-
-
     BasicBlock *Header0 = L0->getHeader();
     BasicBlock *Latch0  = L0->getLoopLatch();
     BasicBlock *Header1 = L1->getHeader();
@@ -236,7 +290,7 @@ struct LoopFusionPass: PassInfoMixin<LoopFusionPass>{
     // controllo preliminare sulle istruzioni di branch dei latch
     auto *Br0 = dyn_cast<BranchInst>(Latch0->getTerminator());
     auto *Br1 = dyn_cast<BranchInst>(Latch1->getTerminator());
-    if(!Br0 || !Br0->isConditional() || !Br1 || !Br1->isConditional())
+    if(!Br0 || !Br1)
       return false;
   
     // -- step 1: sostituione usi PHI -- 
@@ -263,12 +317,11 @@ struct LoopFusionPass: PassInfoMixin<LoopFusionPass>{
     IV1->replaceAllUsesWith(IV0);
     IV1->eraseFromParent();
  
-    // unisco le istruzioni di step
+    // sostituisco gli usi della step
     if(Step0 != Step1){
       Step1->replaceAllUsesWith(Step0);
       if(auto *Step1Inst = dyn_cast<Instruction>(Step1))
-        if(Step1Inst->use_empty())
-          Step1Inst->eraseFromParent();
+        Step1Inst->eraseFromParent();
     }
     
     // -- secondo step: unione dei due loop --
@@ -280,6 +333,8 @@ struct LoopFusionPass: PassInfoMixin<LoopFusionPass>{
     BranchInst *G0 = L0->getLoopGuardBranch();
     if(G0){
       BranchInst *G1 = L1->getLoopGuardBranch();
+
+      // prendo il successore non preheader di G1
       BasicBlock *AfterLoop1 = G1->getSuccessor(G1->getSuccessor(0) == Preheader1 ? 1 : 0);
 
       DeadBlocks.push_back(L0->getExitBlock());
@@ -290,8 +345,8 @@ struct LoopFusionPass: PassInfoMixin<LoopFusionPass>{
       G0->setSuccessor(SkipIdx, AfterLoop1);
     }
 
-    // elimino il vecchio latch del primo loop e lo sostituisco con un
-    // salto incondizionato verso L1
+    // elimino il vecchio latch di L0 e lo sostituisco con un
+    // salto incondizionato verso l'header di L1
     Br0->eraseFromParent();
     BranchInst::Create(Header1, Latch0);
 
@@ -302,8 +357,9 @@ struct LoopFusionPass: PassInfoMixin<LoopFusionPass>{
 
     // le phi di L0 devono ricevere il backedge dal latch di L1
     for(PHINode &PN : Header0->phis()){
+      //cerco quale ingresso della PHI proviene dal vecchio latch
       int Idx = PN.getBasicBlockIndex(Latch0);
-      if(Idx >= 0) PN.setIncomingBlock(Idx, Latch1);
+      PN.setIncomingBlock(Idx, Latch1);
     }
 
     // ricreo le phi del secondo loop
@@ -373,7 +429,6 @@ struct LoopFusionPass: PassInfoMixin<LoopFusionPass>{
 
           Changed = true;
           FusedSomething = true;
-          errs() << "I loop sono stati fusi\n";
           // se ho fuso qualcosa, le analisi correnti non sono più valide: ricomincio da capo
           AM.invalidate(F, PreservedAnalyses::none());
           break;
